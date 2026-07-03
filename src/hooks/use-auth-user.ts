@@ -20,7 +20,7 @@ export function useAuthUser() {
       const current = await getCurrentUser();
       const attributes = await fetchUserAttributes();
       setUser({
-        userId: current.userId,
+        userId: attributes.sub as string,
         username: current.username,
         email: attributes.email,
         name: attributes.name,

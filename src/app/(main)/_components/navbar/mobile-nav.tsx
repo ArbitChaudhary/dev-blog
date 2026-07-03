@@ -69,7 +69,7 @@ export function MobileNav() {
                 "rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground",
                 isActive(pathname, link.href)
                   ? "bg-muted text-foreground"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {link.label}

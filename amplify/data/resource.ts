@@ -27,6 +27,13 @@ const schema = a
         updatedAt: a.datetime(),
       })
       .identifier(["id"])
+      .secondaryIndexes((index) => [
+        index("type")
+          .sortKeys(["createdAt"])
+          .queryField("listUserProfileCreatedAt"),
+        index("email"),
+        index("fullname"),
+      ])
       .authorization((allow) => [
         allow.group("admin"),
         allow.group("author").to(["read"]),
@@ -53,12 +60,56 @@ const schema = a
         updatedAt: a.datetime(),
       })
       .identifier(["id"])
+      .secondaryIndexes((index) => [
+        index("title")
+          .sortKeys(["createdAt"])
+          .queryField("listBlogPostByCreatedAt"),
+        index("authorId")
+          .sortKeys(["createdAt"])
+          .queryField("listBlogPostByAuthorId"),
+        index("title"),
+      ])
       .authorization((allow) => [
         allow.group("admin"),
         allow.group("author").to(["read"]),
         allow.authenticated().to(["read", "update", "create"]),
         allow.guest().to(["read"]),
       ]),
+    Comment: a
+      .model({
+        id: a.id().required(),
+        postId: a.string().required(),
+        parentCommentId: a.string(),
+        userId: a.string(),
+        body: a.string().required(),
+        depth: a.integer().default(0),
+        createdAt: a.datetime(),
+        updatedAt: a.datetime(),
+      })
+      .identifier(["id"])
+      .authorization((allow) => [
+        allow.group("author").to(["read", "create", "delete", "update"]),
+        allow.guest().to(["read", "create"]),
+      ]),
+    Bookmark: a
+      .model({
+        id: a.id().required(),
+        userId: a.string().required(),
+        postId: a.string().required(),
+        createdAt: a.datetime(),
+      })
+      .identifier(["id"])
+      .authorization((allow) => [
+        allow.group("author").to(["read", "create", "delete"]),
+      ]),
+    NewsletterSubscription: a
+      .model({
+        id: a.id().required(),
+        email: a.string().required(),
+        createdAt: a.datetime(),
+      })
+      .identifier(["id"])
+      .authorization((allow) => [allow.guest().to(["create", "delete"])]),
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
 

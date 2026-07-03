@@ -15,6 +15,7 @@ export const userProfileApi = baseApi.injectEndpoints({
           if (errors) {
             return { error: errors };
           }
+          console.log("Fetched user profile:", data);
 
           return { data };
         } catch (error) {

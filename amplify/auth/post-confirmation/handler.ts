@@ -9,7 +9,7 @@ const { resourceConfig, libraryOptions } =
   await getAmplifyDataClientConfig(env);
 Amplify.configure(resourceConfig, libraryOptions);
 
-const client = generateClient<Schema>();
+const client = generateClient<Schema>({ authMode: "iam" });
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
   await client.models.UserProfile.create({
